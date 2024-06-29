@@ -1,0 +1,44 @@
+---
+- name: Install Docker
+  yum:
+    name: docker
+    state: present
+    update_cache: yes
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add Kubernetes repository
+  copy:
+    content: |
+      [kubernetes]
+      name=Kubernetes
+      baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el9-x86_64
+      enabled=1
+      gpgcheck=1
+      repo_gpgcheck=1
+      gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: Install Kubernetes components
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+- name: Enable and start kubelet
+  systemd:
+    name: kubelet
+    enabled: yes
+    state: started
+
+- name: Join worker node to the Kubernetes cluster
+  command: "{{ hostvars['master'].join_command }}"
+  when: inventory_hostname == "worker"

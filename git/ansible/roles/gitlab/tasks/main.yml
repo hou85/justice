@@ -1,0 +1,54 @@
+---
+# tasks file for roles/
+
+- name: Update all packages
+  yum:
+    name: '*'
+    state: latest
+    enablerepo: "*"
+
+- name: Install dependencies
+  yum:
+    name:
+      - curl
+      - policycoreutils
+      - openssh-server
+      - openssh-clients
+      - postfix
+      - cronie
+      - policycoreutils-python-utils
+    state: present
+
+
+- name: Add GitLab package repository
+  yum_repository:
+    name: gitlab_gitlab-ce
+    description: 'GitLab CE Repository'
+    baseurl: 'https://packages.gitlab.com/gitlab/gitlab-ce/el/9/$basearch'
+    gpgcheck: no
+
+- name: Install GitLab CE
+  yum:
+    name: gitlab-ce
+    state: present
+    disablerepo: "*"
+    enablerepo:
+      - "gitlab_gitlab-ce"
+      - "rhel-9-appstream-rhui-rpms"
+      - "rhel-9-baseos-rhui-rpms"
+
+- name: stop GitLab
+  command: /opt/gitlab/bin/gitlab-ctl stop
+
+- name: add localhost to EXTERNAL_URL
+  lineinfile:
+    path: /etc/gitlab/gitlab.rb
+    regexp: '^external_url'
+    line: "external_url 'http://{{ inventory_hostname }}:7000'"
+    state: present
+
+- name: Configure GitLab
+  command: /opt/gitlab/bin/gitlab-ctl reconfigure
+
+- name: start GitLab
+  command: /opt/gitlab/bin/gitlab-ctl start

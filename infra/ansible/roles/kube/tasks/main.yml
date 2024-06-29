@@ -1,0 +1,6 @@
+---
+- include_tasks: setup-master.yml
+  when: tasks_from is undefined or tasks_from == 'setup-master'
+
+- include_tasks: setup-worker.yml
+  when: tasks_from == 'setup-worker'
