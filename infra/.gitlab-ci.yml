@@ -25,12 +25,16 @@ before_script:
 
 validate:
   stage: validate
+  tags:
+    - runner
   script:
     - terraform init
     - terraform validate
 
 plan:
   stage: plan
+  tags:
+    - runner
   script:
     - terraform plan -out=tfplan
   artifacts:
@@ -39,6 +43,8 @@ plan:
 
 apply:
   stage: apply
+  tags:
+    - runner
   script:
     - terraform apply -auto-approve tfplan
   dependencies:
@@ -46,6 +52,8 @@ apply:
 
 configure_cluster:
   stage: configure
+  tags:
+    - runner
   script:
     - cd ${TF_ROOT}
     - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/k8s-master.yaml
@@ -57,6 +65,8 @@ configure_cluster:
 
 add_worker:
   stage: add_worker
+  tags:
+    - runner
   script:
     - cd ${TF_ROOT}
     - terraform apply -auto-approve -var="add_worker=true"
