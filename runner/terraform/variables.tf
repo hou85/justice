@@ -20,19 +20,5 @@ variable "key_name" {
   default     = "runner"
 }
 
-variable "gitlab_token" {
-  description = "GitLab Personal Access Token"
-  type        = string
-  sensitive   = true
-}
-variable gitlab_runner_tags {
-  description = "Gitlab Runner tag list (comma separated)."
-  default = "test"
-}
-
-variable "gitlab_project_id" {
-  description = "GitLab Project ID"
-  type        = string
-}
 
 

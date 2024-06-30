@@ -1,0 +1,25 @@
+---
+# tasks file for proxy internal
+- name: Install internal proxy software
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+- name: Configure internal proxy
+  ansible.builtin.template:
+    src: internal_proxy.conf.j2
+    dest: /etc/nginx/sites-available/internal_proxy.conf
+  notify: Restart nginx
+
+- name: Enable internal proxy site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/internal_proxy.conf
+    dest: /etc/nginx/sites-enabled/internal_proxy.conf
+    state: link
+  notify: Restart nginx
+
+- name: Ensure internal proxy log directory exists
+  ansible.builtin.file:
+    path: "{{ proxy_internal_log_path }}"
+    state: directory
+    mode: '0755'

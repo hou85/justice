@@ -1,0 +1,5 @@
+---
+# defaults file for runner
+gitlab_runner_description: "My GitLab Runner"
+gitlab_registration_token: ""
+gitlab_runner_tags: test

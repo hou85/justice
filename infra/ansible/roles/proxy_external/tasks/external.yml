@@ -1,0 +1,25 @@
+---
+# tasks file for proxy external
+- name: Install external proxy software
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+- name: Configure external proxy
+  ansible.builtin.template:
+    src: external_proxy.conf.j2
+    dest: /etc/nginx/sites-available/external_proxy.conf
+  notify: Restart nginx
+
+- name: Enable external proxy site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/external_proxy.conf
+    dest: /etc/nginx/sites-enabled/external_proxy.conf
+    state: link
+  notify: Restart nginx
+
+- name: Ensure external proxy log directory exists
+  ansible.builtin.file:
+    path: "{{ proxy_external_log_path }}"
+    state: directory
+    mode: '0755'

@@ -1,0 +1,5 @@
+---
+- hosts: worker
+  become: yes
+  roles:
+    - kube_worker_setup

@@ -13,7 +13,7 @@ resource "aws_instance" "gitlab" {
   security_groups = [module.gitlab_security_group.security_group_name]
 
   provisioner "local-exec" {
-    command = "echo ${self.public_ip} > ip_address.txt"
+    command = "echo ${self.public_ip} > ../../runner/ansible/ip_address.txt"
   }
 
   tags = {

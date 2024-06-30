@@ -1,0 +1,12 @@
+server {
+    listen {{ proxy_external_port }};
+    
+    access_log {{ proxy_external_log_path }}/access.log;
+    error_log {{ proxy_external_log_path }}/error.log;
+
+    location / {
+        proxy_pass http://internal_proxy;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}

@@ -1,0 +1,3 @@
+- hosts: internal
+  roles:
+    - role: proxy_internal

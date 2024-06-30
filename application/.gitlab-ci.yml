@@ -1,0 +1,28 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_REGISTRY: your-registry.com
+  DOCKER_IMAGE: ${DOCKER_REGISTRY}/myapp
+  KUBERNETES_NAMESPACE: default
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t ${DOCKER_IMAGE}:${CI_COMMIT_SHA} .
+    - docker push ${DOCKER_IMAGE}:${CI_COMMIT_SHA}
+
+deploy:
+  stage: deploy
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  script:
+    - kubectl config use-context my-cluster
+    - kubectl apply -f kubernetes/deployment.yaml
+    - kubectl apply -f kubernetes/service.yaml
+    - kubectl apply -f kubernetes/ingress.yaml

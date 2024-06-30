@@ -1,0 +1,4 @@
+- hosts: runner
+  become: yes
+  roles:
+    - runner

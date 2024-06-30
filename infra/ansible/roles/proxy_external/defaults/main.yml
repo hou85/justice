@@ -1,0 +1,5 @@
+---
+# defaults file for proxy
+proxy_external_port: 8081
+proxy_external_log_path: /var/log/proxy_external
+

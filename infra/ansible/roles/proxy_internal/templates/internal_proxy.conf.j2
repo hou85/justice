@@ -1,0 +1,10 @@
+server {
+    listen {{ proxy_internal_port }};
+    server_name houssem.com;
+
+    location / {
+        proxy_pass http://kubernetes-ingress-controller;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
