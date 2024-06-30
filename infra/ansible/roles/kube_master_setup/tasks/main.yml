@@ -5,7 +5,9 @@
   yum:
     name: '*'
     state: latest
-
+- name: install containerd
+  command: yum install https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive06/packages/containerd/1.5.3/1.fc34/x86_64/containerd-1.5.3-1.fc34.x86_64.rpm
+  
 - name: Add Docker CE repository
   command: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 
@@ -14,7 +16,6 @@
     name:
       - docker-ce
       - docker-ce-cli
-      - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
     state: present
