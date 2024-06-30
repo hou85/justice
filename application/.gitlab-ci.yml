@@ -3,8 +3,8 @@ stages:
   - deploy
 
 variables:
-  DOCKER_REGISTRY: your-registry.com
-  DOCKER_IMAGE: ${DOCKER_REGISTRY}/myapp
+  DOCKER_REGISTRY: http://adress-gitlab:7000
+  DOCKER_IMAGE: ${DOCKER_REGISTRY}/app
   KUBERNETES_NAMESPACE: default
 
 build:
