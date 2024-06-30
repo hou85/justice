@@ -1,0 +1,21 @@
+---
+# tasks file for kibana
+---
+- name: Install Kibana
+  yum:
+    name: kibana
+    state: present
+
+- name: Copy Kibana configuration
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    owner: kibana
+    group: kibana
+    mode: '0644'
+
+- name: Start Kibana service
+  service:
+    name: kibana
+    state: started
+    enabled: yes

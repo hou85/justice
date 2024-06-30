@@ -1,6 +1,0 @@
----
-- hosts: master
-  become: true
-  roles:
-    - role: kubernetes
-      tasks_from: setup-master

@@ -1,0 +1,35 @@
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  if [kubernetes][container][name] {
+    # Filtre pour les logs des containers Kubernetes
+    if [kubernetes][namespace] {
+      mutate {
+        add_field => { "kubernetes_namespace" => "%{[kubernetes][namespace]}" }
+      }
+    }
+    if [kubernetes][container][name] {
+      mutate {
+        add_field => { "kubernetes_container_name" => "%{[kubernetes][container][name]}" }
+      }
+    }
+  }
+
+  # Exemple de filtre supplémentaire
+  if [message] =~ /error|ERROR/ {
+    mutate {
+      add_tag => ["error"]
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["{{ elasticsearch_host }}"]
+    index => "logs-%{+YYYY.MM.dd}"
+  }
+}

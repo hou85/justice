@@ -1,0 +1,21 @@
+---
+# tasks file for logsatsh
+---
+- name: Install Logstash
+  yum:
+    name: logstash
+    state: present
+
+- name: Copy Logstash configuration
+  template:
+    src: logstash.conf.j2
+    dest: /etc/logstash/conf.d/logstash.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start Logstash service
+  service:
+    name: logstash
+    state: started
+    enabled: yes

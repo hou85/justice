@@ -47,14 +47,19 @@ apply:
 configure_cluster:
   stage: configure
   script:
-    - cd ${ANSIBLE_ROOT}
-    - ansible-playbook -i ec2.py kubernetes_setup.yml
+    - cd ${TF_ROOT}
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/k8s-master.yaml
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/proxy_external.yaml
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/proxy_internal.yaml
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/monotoring.yaml
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/logging.yaml
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/mongodb.yaml
 
 add_worker:
   stage: add_worker
   script:
     - cd ${TF_ROOT}
     - terraform apply -auto-approve -var="add_worker=true"
-    - cd ${ANSIBLE_ROOT}
-    - ansible-playbook -i ec2.py ${ANSIBLE_ROOT}/add_worker.yml
+    - cd cd ${TF_ROOT}
+    - ansible-playbook -i inventory.py ../${ANSIBLE_ROOT}/k8s-master.yaml
   when: manual

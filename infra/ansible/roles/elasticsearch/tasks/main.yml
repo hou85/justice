@@ -1,0 +1,43 @@
+---
+# tasks file for elasticsearch
+- name: Install Java
+  yum:
+    name: java-11-openjdk
+    state: present
+
+- name: Download and install Elasticsearch GPG key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Create Elasticsearch repository file
+  copy:
+    content: |
+      [elasticsearch-7.x]
+      name=Elasticsearch repository for 7.x packages
+      baseurl=https://artifacts.elastic.co/packages/7.x/yum
+      gpgcheck=1
+      gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      enabled=1
+      autorefresh=1
+      type=rpm-md
+    dest: /etc/yum.repos.d/elasticsearch.repo
+
+- name: Install Elasticsearch
+  yum:
+    name: elasticsearch
+    state: present
+
+- name: Configure Elasticsearch
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    mode: 0644
+  notify: restart elasticsearch
+
+- name: Ensure Elasticsearch is started and enabled
+  systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+
