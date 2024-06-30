@@ -1,0 +1,25 @@
+---
+# tasks file for mongodb
+- name: Import MongoDB GPG key
+  rpm_key:
+    state: present
+    key: https://www.mongodb.org/static/pgp/server-5.0.asc
+
+- name: Add MongoDB repository
+  yum_repository:
+    name: mongodb-org-5.0
+    description: MongoDB Repository
+    baseurl: https://repo.mongodb.org/yum/redhat/8/mongodb-org/5.0/x86_64/
+    gpgcheck: yes
+    enabled: yes
+
+- name: Install MongoDB packages
+  yum:
+    name: mongodb-org
+    state: present
+
+- name: Start MongoDB service
+    ervice:
+    name: mongod
+    state: started
+    enabled: yes

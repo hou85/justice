@@ -33,7 +33,6 @@
     src: elasticsearch.yml.j2
     dest: /etc/elasticsearch/elasticsearch.yml
     mode: 0644
-  notify: restart elasticsearch
 
 - name: Ensure Elasticsearch is started and enabled
   systemd:
