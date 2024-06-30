@@ -78,6 +78,7 @@ II- Gitalb-runner
   ansible-playbook -i terraform_inventory.py ../ansible/install_gitlab.yml
   Entrer: runner authentication token
 ```
+![Test Image 1](Capture.png)
 
 III- Création infrastructure:
 
