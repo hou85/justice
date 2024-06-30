@@ -40,11 +40,18 @@
 - name: stop GitLab
   command: /opt/gitlab/bin/gitlab-ctl stop
 
-- name: add localhost to EXTERNAL_URL
+- name: add adress to EXTERNAL_URL
   lineinfile:
     path: /etc/gitlab/gitlab.rb
     regexp: '^external_url'
     line: "external_url 'http://{{ inventory_hostname }}:7000'"
+    state: present
+
+- name: Create gitlab registry
+  lineinfile:
+    path: /etc/gitlab/gitlab.rb
+    regexp: '^registry_external_url'
+    line: "registry_external_url 'http://{{ inventory_hostname }}:7000'"
     state: present
 
 - name: Configure GitLab
